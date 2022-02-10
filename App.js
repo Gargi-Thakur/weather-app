@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import Form from './src/components/layout/Form';
 import Content from './src/components/layout/Content';
 import Footer from './src/components/layout/Footer';
@@ -14,6 +14,7 @@ export default function App() {
   const [windSpeed, setWindSpeed] = useState('');
   const [minTemp, setMinTemp] = useState('');
   const [pressure, setPressure] = useState('');
+  const [weatherIcon, setWeatherIcon] = useState('');
 
   const fetchData = () => {
     fetchCityData(city);
@@ -34,13 +35,15 @@ export default function App() {
     setPressure(response.main.pressure);
     setWindSpeed(response.wind.speed);
     setMinTemp(response.main.temp_min);
+    setWeatherIcon(response.weather[0].icon);
   }
 
   return (
     <View style={styles.container}>
       <Form onChangeText={text => setCity(text)} onSubmit={fetchData} />
-      <Content temp={temp} city={city} countryCode={countryCode} weather={weather} />
-      <Footer pressure={pressure} windSpeed={windSpeed} minTemp={minTemp} />
+      <Content temp={temp} city={city} countryCode={countryCode} weather={weather} weatherIcon={weatherIcon} />
+      <Footer pressure={pressure} windSpeed={windSpeed} minTemp={minTemp} weatherIcon={weatherIcon} />
+
       <StatusBar style="auto" />
     </View>
   );
@@ -53,9 +56,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  image: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-  }
+
 });
